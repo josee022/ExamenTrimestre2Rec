@@ -19,16 +19,7 @@
                 required readonly autofocus autocomplete="aula" />
         </div>
 
-        <div>
-            <br>
-            <strong>Cambios Realizados:</strong>
-            <br>
-            @foreach ($cambios as $cambio)
-                El ordenador pasó del aula <strong>{{ $cambio->origen->nombre }}</strong> y ahora se encuentra en el
-                aula <strong>{{ $cambio->destino->nombre }}</strong>.
-                <hr style="border-top: 1px solid #ccc; margin: 20px 0;">
-            @endforeach
-        </div>
+        <livewire:eliminar-cambios :cambios="$cambios"/>
 
         <div>
             <strong>Nombre de los dispositivos de este ordenador:</strong>
