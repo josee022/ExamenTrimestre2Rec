@@ -1,65 +1,57 @@
 <x-app-layout>
+    <br>
     <div class="w-1/2 mx-auto">
-        <!-- Título -->
         <div>
-            <x-input-label for="titulo" :value="'Título del libro'" />
-            <x-text-input id="titulo" class="block mt-1 w-full"
-                type="text" name="titulo" :value="$libro->titulo" required
-                readonly autofocus autocomplete="titulo" />
+            <x-input-label for="marca" :value="'Título del ordenador'" />
+            <x-text-input id="marca" class="block mt-1 w-full" type="text" name="marca" :value="$ordenador->marca" required
+                readonly autofocus autocomplete="marca" />
         </div>
 
-        <!-- Autor -->
         <div class="mt-4">
-            <x-input-label for="autor" :value="'Autor del libro'" />
-            <x-text-input id="autor" class="block mt-1 w-full"
-                type="text" name="autor" :value="$libro->autor" required
-                readonly autofocus autocomplete="autor" />
+            <x-input-label for="modelo" :value="'modelo del ordenador'" />
+            <x-text-input id="modelo" class="block mt-1 w-full" type="text" name="modelo" :value="$ordenador->modelo"
+                required readonly autofocus autocomplete="modelo" />
+        </div>
+
+        <div class="mt-4">
+            <x-input-label for="aula" :value="'aula del ordenador'" />
+            <x-text-input id="aula" class="block mt-1 w-full" type="text" name="aula" :value="$ordenador->aula->nombre"
+                required readonly autofocus autocomplete="aula" />
+        </div>
+
+        <div>
+            <br>
+            <strong>Cambios Realizados:</strong>
+            <br>
+            @foreach ($cambios as $cambio)
+                El ordenador pasó del aula <strong>{{ $cambio->origen->nombre }}</strong> y ahora se encuentra en el
+                aula <strong>{{ $cambio->destino->nombre }}</strong>.
+                <hr style="border-top: 1px solid #ccc; margin: 20px 0;">
+            @endforeach
+        </div>
+
+        <div>
+            <strong>Nombre de los dispositivos de este ordenador:</strong>
+            <br>
+            @foreach ($dispositivos as $key => $dispositivo)
+                @if ($key > 0)
+                    @if ($key == count($dispositivos) - 1)
+                        y
+                    @else
+                        ,
+                    @endif
+                @endif
+                {{ $dispositivo->nombre }}
+            @endforeach
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a href="{{ route('libros.index') }}">
+            <a href="{{ route('ordenadores.index') }}">
                 <x-secondary-button class="ms-4">
                     Volver
-                </x-primary-button>
+                    </x-primary-button>
             </a>
         </div>
 
-        <table class="mt-8 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Código del ejemplar
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        ¿Está prestado?
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Fecha del préstamo
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($libro->ejemplares as $ejemplar)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ truncar($ejemplar->codigo) }}
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if ($ejemplar->prestamosVigentes()->count() > 0)
-                                Sí
-                            @else
-                                No
-                            @endif
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if ($ejemplar->prestamos->isNotEmpty())
-                                {{ $ejemplar->prestamos->first()->created_at }}
-                            @endif
-                        </td>
-                    </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </x-app-layout>

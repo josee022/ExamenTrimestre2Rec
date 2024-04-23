@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aula;
+use App\Models\Cambio;
 use App\Models\Ordenador;
 use Illuminate\Http\Request;
 
@@ -21,9 +23,12 @@ class OrdenadorController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Ordenador $ordenador)
     {
-        return view('ordenadores.create');
+        return view('ordenadores.create', [
+            'ordenador' => $ordenador,
+            'aulas' => Aula::all(),
+        ]);
     }
 
     /**
@@ -31,13 +36,19 @@ class OrdenadorController extends Controller
      */
     public function store(Request $request)
     {
+
+
+
         $validated = $request->validate([
             'marca' => 'required|max:255',
             'modelo' => 'required|max:255',
+            'aula_id' => 'required|exists:aulas,id',
         ]);
 
         $ordenador = new Ordenador();
-        $ordenador->titulo = $validated['titulo'];
+        $ordenador->marca = $validated['marca'];
+        $ordenador->modelo = $validated['modelo'];
+        $ordenador->aula_id = $validated['aula_id'];
         $ordenador->save();
         session()->flash('success', 'El ordenador se guardó correctamente.');
         return redirect()->route('ordenadores.index');
@@ -51,6 +62,8 @@ class OrdenadorController extends Controller
     {
         return view('ordenadores.show', [
             'ordenador' => $ordenador,
+            'cambios' => $ordenador-> cambios,
+            'dispositivos' => $ordenador->dispositivos,
         ]);
 
     }
@@ -62,6 +75,7 @@ class OrdenadorController extends Controller
     {
         return view('ordenadores.edit', [
             'ordenador' => $ordenador,
+            'aulas' => Aula::all(),
         ]);
 
     }
@@ -71,12 +85,24 @@ class OrdenadorController extends Controller
      */
     public function update(Request $request, Ordenador $ordenador)
     {
+
+        if($ordenador->aula_id != $request->aula_id){
+            $cambio = new Cambio();
+            $cambio->ordenador_id = $ordenador->id;
+            $cambio->origen_id = $ordenador->aula_id;
+            $cambio->destino_id = $request->aula_id;
+            $cambio->save();
+        }
+
         $validated = $request->validate([
             'marca' => 'required|max:255',
             'modelo' => 'required|max:255',
+            'aula_id' => 'required|exists:aulas,id',
         ]);
 
-        $ordenador->titulo = $validated['titulo'];
+        $ordenador->marca = $validated['marca'];
+        $ordenador->modelo = $validated['modelo'];
+        $ordenador->aula_id = $validated['aula_id'];
         $ordenador->save();
         session()->flash('success', 'El ordenador se guardó correctamente.');
         return redirect()->route('ordenadores.index');

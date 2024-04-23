@@ -1,28 +1,42 @@
 <x-app-layout>
     <div class="w-1/2 mx-auto">
-        <form method="POST" action="{{ route('libros.store') }}">
+        <form method="POST" action="{{ route('ordenadores.store') }}">
             @csrf
 
-            <!-- Título -->
             <div>
-                <x-input-label for="titulo" :value="'Título del libro'" />
-                <x-text-input id="titulo" class="block mt-1 w-full"
-                    type="text" name="titulo" :value="old('titulo')" required
-                    autofocus autocomplete="titulo" />
-                <x-input-error :messages="$errors->get('titulo')" class="mt-2" />
+                <x-input-label for="marca" :value="'Título del ordenador'" />
+                <x-text-input id="marca" class="block mt-1 w-full"
+                    type="text" name="marca" :value="old('marca')" required
+                    autofocus autocomplete="marca" />
+                <x-input-error :messages="$errors->get('marca')" class="mt-2" />
             </div>
 
-            <!-- Autor -->
             <div class="mt-4">
-                <x-input-label for="autor" :value="'Autor del libro'" />
-                <x-text-input id="autor" class="block mt-1 w-full"
-                    type="text" name="autor" :value="old('autor')" required
-                    autofocus autocomplete="autor" />
-                <x-input-error :messages="$errors->get('autor')" class="mt-2" />
+                <x-input-label for="modelo" :value="'modelo del ordenador'" />
+                <x-text-input id="modelo" class="block mt-1 w-full"
+                    type="text" name="modelo" :value="old('modelo')" required
+                    autofocus autocomplete="modelo" />
+                <x-input-error :messages="$errors->get('modelo')" class="mt-2" />
+            </div>
+
+            <div class="mt-4">
+                <x-input-label for="aula_id" :value="'Aula del ordenador'" />
+                <select id="aula_id"
+                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                    name="aula_id">
+                    @foreach ($aulas as $aula)
+                        <option value="{{ $aula->id }}"
+                            {{ old('aula_id', $ordenador->aula_id) == $aula->id ? 'selected' : '' }}
+                            >
+                            {{ $aula->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('aula_id')" class="mt-2" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <a href="{{ route('libros.index') }}">
+                <a href="{{ route('ordenadores.index') }}">
                     <x-secondary-button class="ms-4">
                         Volver
                         </x-primary-button>
